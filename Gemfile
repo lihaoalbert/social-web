@@ -5,15 +5,16 @@ gem 'rails', '3.1.3'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql'
-gem 'ruby-mysql'
+#gem 'mysql'
+gem 'mysql2'
+#gem 'ruby-mysql'
 gem 'devise'
 gem 'rails3-generators'
 gem "sinatra"
 gem "oauth"
 gem "json"
 gem "weibo", '0.0.11'
-gem 'delayed_job', '2.1.4'
+#gem 'delayed_job', '2.1.4'
 
 
 # Gems used only for assets and not required
@@ -41,7 +42,6 @@ gem 'jquery-rails'
 group :test do
   # Pretty printed test output
   gem 'turn', '0.8.2', :require => false
-<<<<<<< HEAD
   gem 'rspec'
 end
 
@@ -54,7 +54,5 @@ require 'v8'
 gem 'execjs'
 gem 'therubyracer'
 gem 'lazy_high_charts', '~> 1.1.5' 
-gem 'delayed_job', '2.1.4'
-=======
-end
->>>>>>> upstream/master
+gem 'resque'
+gem 'resque-scheduler'
