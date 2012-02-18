@@ -1,0 +1,16 @@
+    lunch:
+      cron: 0 12 * * *
+      class: WeiboJob
+      args: 1867570035
+      description: Lunch
+    dinner:
+      cron: 0 6 * * *
+      class: WeiboJob
+      args: 1867570035
+      description: Dinner
+    midnight_snack:
+      cron: 0 0 * * *
+      class: WeiboJob
+      args: 1867570035
+      description: Midnight Snack
+

@@ -60,13 +60,16 @@
   </head>
   <body>
             <p class="notice"></p>
-  	  	<% if notice != nil or alert != nil %>  
-  	  	<div class="alert-message warning fade in" data-alert="alert">
+  	  	<div id="notice" class="alert-message warning fade in" data-alert="alert" style="display:<% if notice != nil or alert != nil %>
+  	  				block
+  	  				<% else %>
+  	  				none"
+  	  				<% end %>
+  	  			>
             <a class="close" href="#">x</a>
-            <p class="notice"><%= notice %></p>
+            <p class="notice" id="a-notice"><%= notice %></p>
             <p class="alert"><%= alert %></p>
         </div>
-        <% end %> 
   <div id="doc">
     <div class="topbar" data-dropdown="dropdown">
       <div class="fill">
@@ -80,42 +83,48 @@
             <li class="menu">
                <a href="#" class="menu">客户管理</a>
                <ul class="menu-dropdown">
-                  <li><a href="/messages/select_message">回复评论</a></li>
-                  <li><a href="/messages/upload_message">关系管理</a></li>
+                  <li><a href="/messages/answer">回复评论</a></li>
+                  <li><a href="/accounts/following">关系管理</a></li>
                   <li class="divider"></li>
-                  <li><a href="/messages/display_message">推荐客户</a></li>
-                  <li><a href="/messages/select_message">潜客规则设置</a></li>
+                  <li><a href="/accounts/recommend">推荐客户</a></li>
+                  <li><a href="/accounts/recommend_setting">潜客规则设置</a></li>
                 </ul>
              </li>
             <li class="menu">
                <a href="#" class="menu">微博监听</a>
                <ul class="menu-dropdown">
-                  <li><a href="/messages/display_message">数据导出</a></li>
-                  <li><a href="/messages/select_message">监听规则设置</a></li>
+                  <li><a href="/messages/output">数据导出</a></li>
+                  <li><a href="/messages/userrule_message">监听规则设置</a></li>
                 </ul>
               </li>
               <li class="menu">
                  <a href="#" class="menu">数据分析</a>
                  <ul class="menu-dropdown">
-                    <li><a href="/report">关键词分析</a></li>
-                    <li><a href="#">客户分析</a></li>
-                    <li><a href="#">事件串分析</a></li>
+                    <li><a href="/reports/keywords">关键词分析</a></li>
+                    <li><a href="/reports/customer">客户分析</a></li>
+                    <li><a href="/reports/message_track">微博传播轨迹</a></li>
+                    <li><a href="/reports/event_track">事件串分析</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">我的微博统计</a></li>
+                    <li><a href="/reports/my_message">我的微博统计</a></li>
                   </ul>
                </li>
           </ul>
-          <form action="/users/sign_in" class="pull-right">
-           <p style="color: white;">
+          <ul class="pull-right nav">
+			  <li class="menu">
+			     <a href="#" class="menu">设置</a>
+               <ul class="menu-dropdown">
+                  <li><a href="/messages/output">数据导出</a></li>
+                  <li><a href="/messages/userrule_message">监听规则设置</a></li>
+                </ul>
+               </li>
             <% if user_signed_in? %>    
-			    当前用户 <%=link_to current_user.email, {:action=>"select_message",:user=>"123", :usee33r=>"123", :controller=>"messages"} %>    
-			    <%= link_to "登出", destroy_user_session_path, :method => :delete %>    
+			    <li><%=link_to current_user.email, {:action=>"select_message",:user=>"123", :usee33r=>"123", :controller=>"messages"} %>    </li>
+			    <li><%= link_to "登出", destroy_user_session_path, :method => :delete %>   </li> 
 			  <% else %>    
-			    <%= link_to "注册", new_user_registration_path %> 或    
-
-            <%= link_to "登入", new_user_session_path %>
-			  <% end %>     </p>
-          </form>
+			    <li><%= link_to "注册", new_user_registration_path %></li>
+              <li><%= link_to "登入", new_user_session_path %></li>
+			  <% end %>
+			 </ul>
         </div>
       </div>
       </div>

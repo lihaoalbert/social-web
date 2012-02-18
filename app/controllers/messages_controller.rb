@@ -79,8 +79,14 @@ class MessagesController < ApplicationController
         @datamessage = RuleMessage.find(:last,:conditions => "user_id = " + @userid.to_s).to_json
       else
         rulemessage = RuleMessage.find(@strruleid)
-        rulemessage.update_attributes({:rulename => @strrulename, :keyword => @strkeyword, :username => @strusername, :filterori => @filterori});
-        @datamessage = ""
+        ifSucuss=rulemessage.update_attributes({:rulename => @strrulename, :keyword => @strkeyword, :username => @strusername, :filterori => @filterori});
+        if ifSucuss then
+         #flash[:notice] = "保存成功" #notice 存放提示信息  
+         @test = "更改已保存成功" #notice 存放提示信息  
+        else
+           @test = "保存出错" #notice 存放提示信息 
+      end
+        @datamessage = @test
       end
     end
     

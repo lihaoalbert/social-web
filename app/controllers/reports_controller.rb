@@ -173,4 +173,55 @@ class ReportsController < ApplicationController
       format.html # index.html.erb
     end
   end
+
+#关键词分析报表
+  def keywords
+ 
+    respond_to do |format|
+      format.html # index.html.erb
+    end
+  end
+
+#客户分析报表
+  def customer
+ 
+    respond_to do |format|
+      format.html # index.html.erb
+    end
+  end
+
+#微博传播轨迹
+  def message_track
+ 
+    respond_to do |format|
+      format.html # index.html.erb
+    end
+  end
+
+#事件串分析
+  def event_track
+ 
+    respond_to do |format|
+      format.html # index.html.erb
+    end
+  end
+
+#我的微博统计
+  def my_message
+    
+    user_id=1983927817
+    Resque.enqueue(WeiboJob,user_id)  
+    
+    respond_to do |format|
+      format.html # index.html.erb
+    end
+  end
+#测试resque job
+  def parse  
+    user_id=1983927817
+    Resque.enqueue(WeiboJob,user_id)  
+    render :text => "We are working on parsing our feed right now."  
+  end  
+  
+  
 end
