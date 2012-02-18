@@ -1,14 +1,16 @@
 === Social Wiz ====
 启动服务
-cd social-web
-1.
-  rails s
-2. 
-  rake resque:work RAILS_ENV=development VERBOSE=1 QUEUES=*
-3. 
-  rake resque:scheduler
 
-cd resque
-4. rake redis:start
+cd resque   #启动Redis数据库
+1. rake redis:start
+
+cd social-web
+2. 启动web服务
+  rails s
+3. 启动scheduler
+  rake resque:scheduler
+4. 启动队列执行work
+  rake resque:work RAILS_ENV=development VERBOSE=1 QUEUES=*
+
 
 ==================================
