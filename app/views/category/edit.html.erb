@@ -1,0 +1,17 @@
+<%= javascript_include_tag "javascripts/dtree.js" %>
+<div class="row">
+  <div class="main-content" style="width:300px;">
+    <div class="page-header">
+    	<h2> 我的分类<small></small></h2>
+    </div>
+    <div id="modal-from-rule" class="">
+    	<%= render 'tree' %>
+    </div>
+  </div> 
+  <div class="dashboard"> 
+    <div class="components">
+      <%= render 'form' %>
+	</div>
+  </div>
+</div>
+<script>

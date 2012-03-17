@@ -1,0 +1,103 @@
+<%= javascript_include_tag "/javascripts/userrulemessage.js" %>
+<%= javascript_include_tag "/javascripts/test_message.js" %>
+         <div class="row">
+          <div class="main-content" style="width:620px;">
+            <div class="page-header">
+              <h2> 我的监控规则 <small> 关键词组合定义</small></h2>
+            </div>
+            
+          <div id="modal-from-rule" class="modal hide fade">
+            <div class="modal-header">
+              <a href="#" class="close">&times;</a>
+              <h3>Modal 标题</h3>
+            </div>
+            <div class="modal-body">
+            <form>
+				<input type="hidden" id="strruleid" value="<%=h @rulenum > 0 ? @ruleonemessage.id : '' %>" />
+				<input type="hidden" id="strusername" value="" />
+				<div id="strdiv">
+					<div class="clearfix">
+		            <label for="strrulename">规则名称：</label>
+		            <div class="input">
+		              <input type="text" id="strrulename" value="<%=h @rulenum > 0 ? @ruleonemessage.rulename : '' %>" />
+		            </div>
+		          </div>
+					<div class="clearfix">
+		            <label for="strkeyword">关键字：</label>
+		            <div class="input">
+		              <input type="text" id="strkeyword" value="<%=h @rulenum > 0 ? @ruleonemessage.keyword : '' %>" />
+		            </div>
+		          </div>
+					<div class="clearfix">
+		            <label for="str_filter_ori">原创/转发：</label>
+		            <div class="input">
+							<select id="str_filter_ori">
+								<%if @rulenum > 0 && @ruleonemessage.filterori == 0 %>
+								<option value="0" selected="true" >全部</option>
+								<% else %>
+								<option value="0" >全部</option>
+								<% end %>
+								<%if  @rulenum > 0 && @ruleonemessage.filterori == 4 %>
+								<option value="4" selected="true">转发</option>
+								<% else %>
+								<option value="4" >转发</option>
+								<% end %>
+								<%if  @rulenum > 0 && @ruleonemessage.filterori == 5 %>
+								<option value="5" selected="true" >原创</option>
+								<% else %>
+								<option value="5" >原创</option>
+								<% end %>
+							</select>
+		            </div>
+		          </div>
+				</div>
+            </div> 
+            <div class="modal-footer">
+							<input type="button" class="btn primary" id="strsave" value="保存" />
+            </div>
+            
+				</form>
+          </div>
+		<% if params[:id] !=nil && params[:id] != "" %>
+			<script>
+			  $('#modal-from-rule').modal('show');
+			</script>
+		<% end %>
+         </div> 
+         <div class="dashboard"> 
+         		<div class="components">
+         		  <div class="component">
+         		   <input type="button" class="btn big primary" id="txtruleadd" value="添加新规则" data-controls-modal="modal-from-rule" data-backdrop="static"  />
+         		  </div>
+				<hr class="component-spacer">
+         		  <div class="component">
+					<ul id="ruleselect">
+					<%@rulemessage.each do |rulemessage|%>
+					<li><a href='/messages/userrule_message?id=<%=h rulemessage.id %>'  >
+					  <%=h rulemessage.rulename %></a> </li>
+					<% end %>
+				  </ul>
+         		  </div>
+				<hr class="component-spacer">
+				
+				</div>
+          </div><!--   dashboard end   --> 
+         <!--   details pane   --> 
+          <div id="details-pane-outer">
+			    <div class="details-pane-shell">
+              <div class="details-pane" id="details-pane" style="display: none; height: 585px; width: 335px; left: 620px; margin-top: 15px; -webkit-transition-property: none; ">
+		    		<div class="inner-pane active">
+						  <div class="pane-toolbar pane-built-in">
+						          <a class="pane-close toolbar-control " rel="pane_close" href="javascript:void(0)">关闭 <span>×</span></a>
+						    <br style="clear: both">
+						  </div>
+						  <div id="pane-load" style="overflow-y:scroll; ">
+						  </div>
+			    	</div>
+			  </div>
+			</div></div>
+			<!--   details pane  end --> 
+</div></div>
+</div>
+
+

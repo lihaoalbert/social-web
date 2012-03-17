@@ -1,5 +1,6 @@
 require 'resque/server'
 SocialWeb::Application.routes.draw do
+  get "admin/index"
   devise_for :users
   root :to => "home#index"
   match ':controller(/:action(/:id(.:format)))'

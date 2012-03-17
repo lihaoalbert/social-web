@@ -1,0 +1,30 @@
+<div class="component">
+	<% if @ruledef.count <= 10 %>
+	  <%= form_tag :action => 'keyword_rule_new' do %>
+	    <%= submit_tag "添加新规则", :class => "btn big primary" %>
+	  <% end %>
+	<% end %>
+</div>
+<hr class="component-spacer">
+<div class="component">
+	<ul id="ruleselect" style="list-style-type:none;">
+	<%@ruledef.each do |ruledef|%>
+	<li style="width: 130px; float: left">
+		<h4>
+			<%= link_to ruledef.RuleName, {:controller => "settings", :action => "keyword_rule_edit", :id=> ruledef.id} %>
+		</h4>
+	</li>
+	<li style="float: left">
+		<%= form_tag :action => 'rule_delete', :id => ruledef.id, :typeid => 0 do %>
+		<%= submit_tag "删除规则", :class => "btn big primary" %>
+		<% end %>
+	</li>
+	<li>
+		<%= form_tag :action => 'rule_delete', :id => ruledef.id,:typeid => ruledef.RuleType do %>
+		<%= submit_tag (ruledef.RuleType == 1 ? "停止" : "启动"), :class => "btn big primary" %>
+		<% end %>
+	</li>
+	<% end %>
+</ul>
+</div>
+<hr class="component-spacer">

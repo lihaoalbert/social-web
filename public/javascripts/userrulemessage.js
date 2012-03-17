@@ -19,6 +19,8 @@ $(document).ready(function(){
 			success:function(data)
 			{
 				//alert(data);
+				$("#a-notice").replaceWith(data);
+				$("#notice").css("display","block");
 			},
 			error:function(xhr,r,e)
 			{

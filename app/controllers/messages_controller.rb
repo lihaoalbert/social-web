@@ -2,7 +2,66 @@
 class MessagesController < ApplicationController
   before_filter :account_info
   
+  #我的微博
+  def timeline
+    if account_info then
+      @key1 = account_info[0]
+      @key2 = account_info[1]
+      oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
+      oauth.authorize_from_access(@key1,@key2)
+      @mlist = Weibo::Base.new(oauth).friends_timeline
+    end
+  end
+  
+  #@我的微博
+  def mentions
+    if account_info then
+      @key1 = account_info[0]
+      @key2 = account_info[1]
+      oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
+      oauth.authorize_from_access(@key1,@key2)
+      @mlist = Weibo::Base.new(oauth).replies
+    end
+  end
+  
+  def user_timeline
+    if account_info then
+      @key1 = account_info[0]
+      @key2 = account_info[1]
+      oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
+      oauth.authorize_from_access(@key1,@key2)
+      @mlist = Weibo::Base.new(oauth).user_timeline
+    end
+  end
+  
+  #回复评论
+  def answer
+    if user_signed_in?
+      @userid = current_user.id
+    else
+      #@userid = 1
+      redirect_to :controller => 'home'
+    end
+  end
+  
+  #数据导出
+  def output
+    if user_signed_in?
+      @userid = current_user.id
+    else
+      #@userid = 1
+      redirect_to :controller => 'home'
+    end
+  end
+  
   def upload_message
+    if user_signed_in?
+      @userid = current_user.id
+    else
+      #@userid = 1
+      redirect_to :controller => 'home'
+    end
+    
     if (session["imagefile"] != nil) then
       @imgf = session["imagefile"]
     else
@@ -46,9 +105,6 @@ class MessagesController < ApplicationController
     File.open("#{Rails.root}/public/"+ newfilename,"wb"){
       |f| f.write(file_data)
     }
-    #flash[:notice]="文件："+ newfilename+"上传成功。"+
-    #    "上传时间是："+(Time.now).to_s+
-    #    "上传的地址是："+ "#{Rails.root}/public/"
     session["imagefile"] = newfilename
     redirect_to strtxt
     #render :action=>"upload_message"
@@ -90,6 +146,7 @@ class MessagesController < ApplicationController
       end
     end
     
+    #创建一篇微博
     if @strtype == "savemessage" then
       @strmessage = params[:strmes]
       @strimage = params[:strimg]
@@ -106,28 +163,52 @@ class MessagesController < ApplicationController
       end
       @strid = params[:strid]
       if !@strmessage.blank? && !@strimage.blank? then
-        UploadMessage.create({:message => @strmessage, :image => @strimage, :isselected => @sendstate, :uploadtime => @struploadtime, :username => @strusername, :user_id => @struserid, :monitor => @strmonitor, :weibo_firm => @strweibofirm })
+        UploadMessage.create({
+          :message => @strmessage, 
+          :image => @strimage, 
+          :isselected => @sendstate, 
+          :uploadtime => @struploadtime, 
+          :username => @strusername, 
+          :user_id => @struserid, 
+          :monitor => @strmonitor, 
+          :weibo_firm => @strweibofirm 
+        })
         struser = UploadMessage.find(:last, :conditions => "username = '" + @strusername.to_s + "'")
         #struser = UploadMessage.find(:last, :conditions => "username = '" + @strusername.to_s + "'")
         #redirect_to "/messages/test_message"
         #Delayed::Job.enqueue(Jobsmessage.new(@strmessage,@strimage),3, 1.minute.from_now)
-        Jobsmessage.new(@strmessage,@strimage,struser.id,@struserid)
+        if @strmonitor == 1 then
+          
+        end
+        if @sendstate == 1 then
+          Jobsmessage.new(@strmessage,@strimage,struser.id,@struserid)
+        end
       else 
         if !@strmessage.blank?
-          UploadMessage.create({:message => @strmessage, :isselected => @sendstate, :uploadtime => @struploadtime, :username => @strusername, :user_id => @struserid, :monitor => @strmonitor, :weibo_firm => @strweibofirm })
+          UploadMessage.create({
+            :message => @strmessage, 
+            :isselected => @sendstate, 
+            :uploadtime => @struploadtime, 
+            :username => @strusername, 
+            :user_id => @struserid, 
+            :monitor => @strmonitor, 
+            :weibo_firm => @strweibofirm 
+          })
           struser = UploadMessage.find(:last, :conditions => "username = '" + @strusername.to_s + "'")
           
-          if(@strimage == "") then
-            #Jobsmessage.new(@strmessage,@strimage,struser.id,@struserid)
-            #@datamessage = "OK"
-          else
-            #@datamessage = "error"
-          end
+          #判断是否监控，监控向监控表中插入一笔数据
+          if @strmonitor == 1 then
             
-          #Jobsmessage.new(@strmessage,@strimage,struser.id)
+          end
+          
+          #判断是否即时发送
+          if @sendstate == 1 then
+            Jobsmessage.new(@strmessage,@strimage,struser.id)
+          end
         end
       end
-    
+      
+      #对列表中已有的数据作批次删除（做标志位为：0）
       if !@strid.blank? then
         str = @strid.split(",")
         str.each do |strid|
@@ -172,8 +253,16 @@ class MessagesController < ApplicationController
         @strmonitor = params[:strmonitor]
         @sendstate = params[:send_state]
         @struploadtime = Time.now+params[:clock].to_i*60
+        @strmonitor = params[:strmonitor]
         messupdate = UploadMessage.find(@strid)
-        messupdate.update_attributes({:message => @strmessage, :image => @strimage, :uploadtime => @struploadtime, :isselected => @sendstate, :weibo_firm => @strweibofirm })
+        messupdate.update_attributes({
+          :message => @strmessage, 
+          :image => @strimage, 
+          :uploadtime => @struploadtime, 
+          :isselected => @sendstate, 
+          :weibo_firm => @strweibofirm, 
+          :monitor => @strmonitor 
+        })
       end
     end
     
@@ -195,80 +284,14 @@ class MessagesController < ApplicationController
   end
 
   def select_message
-    
-  end
-
-#测试后台方法
-  def test_message
-    @strselectmessage = "1111"
-    #@strusername = "eric_yue"
-    #struser = UploadMessage.find(:last, :conditions => "username = '" + @strusername.to_s + "'")
-    #@strselectmessage = struser.id.to_s + "------------" + struser.isselected.to_s
-    #@strselectmessage = RuleMessage.find_by_user_id(1).to_json
-    #@txturl = "<a href='http://www.baidu.com'>百度</a>"    
-    #rule_select_message #规则生成表
-    #monitor_select_message #监控
-    #sina_provinces_citis #添加地区城市
-    #message_info
-    #oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
-    #oauth.authorize_from_access($txtkey1, $txtkey2)
-    #abc1 = Weibo::Base.new(oauth).verify_credentials
-    ##usergz = Weibo::Base.new(oauth).friendship_show({:source_id  => abc1.id, :target_id => 2278268802 })
-    ##@strselectmessage = usergz.source.following
-    #provinces_city=Weibo::Base.new(oauth).provinces()
-    #@strselectmessage = provinces_city.provinces[35].id
-    #if(@strselectmessage != 400 || @strselectmessage != 100 ) then
-    #  @strselectmessage = true
-    #else
-    #  @strselectmessage = false
-    #end
-    #@strselectmessage1 = provinces_city.provinces[0].citys[0].to_s.split(" ")[1].to_s
-    #
-    #@strselectmessage1 = @strselectmessage1[0,@strselectmessage1.length-1].split("=")[1]
-    
-    #@monitormesaage = UploadMessage.find(:all, :conditions => "monitor = 1 and Wbid is not null")
-    #if @monitormesaage != [] then
-    #  strtxt = ""
-    #  @monitormesaage.each do |monitormesaage|
-    #    @userkey = Userkey.find(monitormesaage.user_id)
-    #    oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
-    #    oauth.authorize_from_access(@userkey.key1, @userkey.key2)
-    #    @messageoneselect = Weibo::Base.new(oauth).status(monitormesaage.Wbid)
-    #    numcomments = @messageoneselect.comments_count
-    #    numreposts = @messageoneselect.reposts_count
-    #    if numcomments == nil then
-    #      numcomments = 0
-    #    end
-    #    if numreposts == nil then
-    #      numreposts = 0
-    #    end
-    #    MonitorMessage.create({:WID => @messageoneselect.id, :reposts_count => numreposts, :comments_count => numcomments })
-    #    strtxt += @messageoneselect.id.to_s + "------" +  numcomments.to_s + "------" + numreposts.to_s + ","
-    #  end
-    #  @strselectmessage = strtxt
-    #else
-    #  @strselectmessage = "1111"
-    #end
-    #@strid = params[:strid]
-    #@userkey = Userkey.find(current_user.id)
-    #$txtkey1 = "11d3f4ba88c23cb0ff2e15dd0ab1d1fc"
-    #$txtkey2 = "763739c2df44939b7caa41f0b9a00506"
-    #$txtkey1 = @userkey.key1
-    #@session1 = @userkey.key1
-    #@strid.each do |strid|
-      
-    #end
-    #oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
-    #oauth.authorize_from_access("11d3f4ba88c23cb0ff2e15dd0ab1d1fc","763739c2df44939b7caa41f0b9a00506")
-    #Weibo::Base.new(oauth).upload(CGI::escape("测试222"),File.new("d:\\1.jpeg","rb"))
-    #Delayed::Job.enqueue(Jobsmessage.new(), 3, 1.minute.from_now)
-    respond_to do |format|
-      format.html { render :layout => false } #:layout => false 设置不使用页面框架
-      format.json  { render :json => @strselectmessage }
+    if user_signed_in?
+      @userid = current_user.id
+    else
+      redirect_to :controller => 'home'
     end
   end
 
-#定义关键词规则页面
+  #定义关键词规则页面
   def userrule_message
     @rulenum = 0
     if user_signed_in?
@@ -559,15 +582,17 @@ class MessagesController < ApplicationController
   def account_info
     if user_signed_in?
       @userkey = Userkey.find(current_user.id)
-    else
-      @userkey = Userkey.find(1)
-    end
       @txtkey1 = @userkey.key1
       @txtkey2 = @userkey.key2
       oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
       oauth.authorize_from_access(@txtkey1,@txtkey2)
-    #获取当前登录帐号的 微博user 信息
-    @account=Weibo::Base.new(oauth).verify_credentials()
+      #获取当前登录帐号的 微博user 信息
+      @account=Weibo::Base.new(oauth).verify_credentials()
+      return [@txtkey1,@txtkey2]
+    else
+      redirect_to :controller => 'home'
+      return false
+    end
   end
   
   #获取列表中用户与当前帐号的关注关系
@@ -594,7 +619,7 @@ class Jobsmessage
     if (strimage == nil && strimage == "") then
       updatemessage.deliver
     else
-      uploadmessage.deliver 
+      uploadmessage.deliver
     end
     
   end

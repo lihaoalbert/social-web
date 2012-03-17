@@ -1,0 +1,52 @@
+<div>
+	<ul>
+		<li>执行规则：</li>
+		<li>
+			<%= form_tag "/admin/rule_select_message",:multipart => true do %>
+			  <%= submit_tag("导入数据") %>
+			<% end %>
+		</li>
+		<li>监控：</li>
+		<li>
+			<%= form_tag "/admin/monitor_select_message",:multipart => true do %>
+			  <%= submit_tag("监控") %>
+			<% end %>
+		</li>
+		<li>添加地区城市：</li>
+		<li>
+			<%= form_tag "/admin/sina_provinces_citis",:multipart => true do %>
+			  <%= submit_tag("添加地区城市") %>
+			<% end %>
+		</li>
+		<li>已有用户一天一笔：</li>
+		<li>
+			<%= form_tag "/admin/user_message",:multipart => true do %>
+			  <%= submit_tag("用户搜索") %>
+			<% end %>
+		</li>
+		<li>获取系统用户三层用户关注和粉丝：</li>
+		<li>
+			<%= form_tag "/admin/user_follower_friends",:multipart => true do %>
+			  <%= submit_tag("用户搜索") %>
+			<% end %>
+		</li>
+		<li>规则获取微博信息：</li>
+		<li>
+			<%= form_tag "/admin/job_weibo_stage",:multipart => true do %>
+			  <%= submit_tag("获取") %>
+			<% end %>
+		</li>
+		<li>插入数据删除临时微博信息：</li>
+		<li>
+			<%= form_tag "/admin/job_delete_stage",:multipart => true do %>
+			  <%= submit_tag("删除") %>
+			<% end %>
+		</li>
+		<li>计算规则笔数</li>
+		<li>
+			<%= form_tag "/admin/countadd",:multipart => true do %>
+			  <%= submit_tag("计算") %>
+			<% end %>
+		</li>
+	</ul>
+</div>

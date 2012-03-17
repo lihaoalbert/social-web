@@ -8,5 +8,6 @@ class CreateRuleMessages < ActiveRecord::Migration
       t.column :filterori, :integer, :limit => 10
       t.timestamps
     end
+    add_index :rule_messages, :rule_id,            :unique => true
   end
 end

@@ -1,0 +1,56 @@
+<div class="stream-manager js-stream-manager-container">
+	<div class="js-stream-manager" id="profile-stream-manager">
+		<div class="stream-title">
+		</div>
+		<div class="stream-container">
+			<div class="stream ">
+				<div class="js-stream-items stream-items" id="stream-items-id">
+				<% if @mlist != nil && @mlist != "" %>
+		  			<% @mlist.each do |mlist| %>
+		  			<!--单条微博 -->
+		    		<div class="js-stream-item stream-item" data-item-id="<%=h mlist.id %>" data-item-type="tweet" media="true"> 
+		    			<div class="stream-item-content tweet js-actionable-tweet js-stream-tweet stream-tweet favorited  " data-is-reply-to="false" data-tweet-id="<%=h mlist.id %>" data-item-id="<%=h mlist.id %>" data-screen-name="<%=h mlist.user.screen_name %>" data-user-id="<%=h mlist.user.id %>">
+		      				<div class="tweet-image">
+				    			<a  onclick="open_user_pane(<%=h mlist.user.id %>);" rel="details_pane" href="javascript:void(0)" title="<%=h mlist.user.screen_name %>">
+				      				<img width="50" height="50" src="<%=h mlist.user.profile_image_url %>" alt="<%=h mlist.user.screen_name %>" title="<%=h mlist.user.screen_name %>">
+				      			</a>
+				      		</div> 
+				 			<div class="tweet-content">
+    							<div class="tweet-row">
+								   <span class="tweet-user-name">
+								     <a style="padding-left:0" class="icon-bg icon-female" onclick="open_user_pane(<%=h mlist.user.id %>);" rel="details_pane" href="javascript:void(0)" title="<%=h mlist.user.screen_name %>">
+								     	<%=h mlist.user.screen_name %> </a>
+								   </span>
+				   				</div>
+				   				<div class="tweet-row">
+				      				<div class="tweet-text js-tweet-text">
+				      					<%=h mlist.text %>
+				      				</div>
+				   				</div>
+				   				<% if mlist.thumbnail_pic %>
+				   				<div class="tweet-row">
+				   					<div class="preview-img">     
+				         				<div class="feed-img">
+				         					<img class="zoom-move" src="<%=h mlist.thumbnail_pic %>" rel="e:zi,fw:0">
+				         				</div>
+				       				</div>   
+				     			</div>
+		         				<% end %>
+				    			<div class="tweet-row">  
+					   				<div class="feed-info">
+					   					<p style="padding-top: 10px;">
+					   						<%=h DateTime.parse(mlist.created_at).strftime("%m月%d日  %H:%M:%S") %> | <a href="javascript:void(0)" onclick="open_weibo_pane(<%=h mlist.id %>,'repost')">转发</a>|<a href="javascript:void(0)" onclick="open_weibo_pane(<%=h mlist.id %>,'comment')" rel="l:cm">评论</a>
+					   					</p>
+					   				</div>   
+					 			</div>
+					        </div>
+						</div>
+					</div>
+					<!--单条微博 结束-->       
+		  			<% end %>
+		  		<% end %>
+		  		</div>
+			</div>
+		</div>
+	</div>
+</div>

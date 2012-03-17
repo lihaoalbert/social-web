@@ -1,0 +1,11 @@
+<h1>Admin#index</h1>
+<p>Find me in app/views/admin/index.html.erb</p>
+<% @userfriend.each do |abc| %>
+<p><%=h abc[0] %></p>
+<% if abc[0] == "ids" %>
+<% abc[1].each do |ccc| %>
+<p><%=h ccc %></p>
+<% end %>
+<% end %>
+<br />
+<% end %>

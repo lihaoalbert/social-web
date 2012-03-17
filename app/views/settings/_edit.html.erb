@@ -1,0 +1,33 @@
+<input type="hidden" id="strruleid" value="" />
+<div id="strdiv" style="padding: 10px;">
+	<%= form_tag :action => 'rule_save', :id => @rulemessage.id do %>
+	<ul style="list-style-type: none">
+		<li style="float: left; width: 150px; height: 10px;"><h4>规则名称：</h4></li>
+		<li style="">
+			<%= text_field_tag 'rulename', @rulemessage.RuleName %>
+		</li>
+	</ul>
+	<ul style="list-style-type: none">
+		<li style="float: left; width: 150px; height: 10px;"><h4>关键字：</h4></li>
+		<li>
+			<%= text_field_tag 'keyword', @rulemessage.KeyWord %>
+		</li>
+	</ul>
+	<ul style="list-style-type: none">
+		<li style="float: left; width: 150px; height: 10px;"><h4>原创/转发：</h4></li>
+		<li>
+			<%= select_tag "filterori", options_for_select({"全部" => 0, "转发" => 4, "原创" => 5}, @rulemessage.FilterOri) %>
+		</li>
+	</ul>
+	<ul style="list-style-type: none">
+		<li style="float: left; width: 80px">
+			<%= submit_tag "保存", :class => "btn primary" %>
+		</li>
+	<% end %>
+		<%= form_tag :action => 'keyword_rule_list' do %>
+		<li>
+			<%= submit_tag "关闭", :class => "btn" %>
+		</li>
+		<% end %>
+    </ul>
+</div>

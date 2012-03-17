@@ -1,0 +1,17 @@
+<%= form_tag :action => 'save_category',:id => @categoryone.id, :parentid => @categoryone.ParentID do %>
+<div class="clearfix">
+   <label for="rulename">分类名称：</label>
+   <div class="input">
+     <%= text_field_tag 'rulename', @categoryone.RuleName, :class => 'xlarge', :size => '30' %>
+   </div>
+   <label for="keyword">关键字：</label>
+   <div class="input">
+     <%= text_field_tag 'keyword', @categoryone.KeyWord, :class => 'xlarge', :size => '30' %>
+   </div>
+   <label for="filterori">原创/转发：</label>
+   <div class="input">
+   	<%= select_tag "filterori", options_for_select({"全部" => 0, "转发" => 4, "原创" => 5}, @categoryone.FilterOri) %>
+   </div>
+   <%= submit_tag "保存", :class => "btn primary" %>
+</div>
+<% end %>

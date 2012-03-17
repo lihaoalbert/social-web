@@ -1,0 +1,16 @@
+<%= javascript_include_tag "/javascripts/rule_list.js" %>
+<div class="row">
+  <div class="main-content" style="width:620px;">
+    <div class="page-header">
+    	<h2> 我的监控规则 <small> 关键词组合查询</small></h2>
+    </div>
+    <div id="modal-from-rule" class="">
+    	<%= render 'list' %>
+    </div>
+  </div> 
+  <div class="dashboard"> 
+    <div class="components">
+      <%= render 'rule_list' %>
+	</div>
+  </div>
+</div>

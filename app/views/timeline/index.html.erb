@@ -46,10 +46,9 @@
           <button data-controls-modal="modal-from-test" data-backdrop="true" data-keyboard="true" class="btn danger">Launch Modal</button>
           <br />
           <a id="detail_id" rel="details_pane" class="btn primery">Details pane</a>
-  <%= high_chart("chart_id2", @jout) do |c| %>
-        <%= "options.tooltip.formatter = function() { return this.point.name + ': ' + this.percentage +' %百分比';}" %>
-        <%= "options.plotOptions.pie.dataLabels.formatter = function() { return this.point.name +': ' + this.percentage +' %';}" %>
-   <%end %>
+  <%= high_chart("chart_id2", @jout) %>
+  <%= high_chart("chart_id3", @h) %>
+  <%= high_chart("my_id", @h) %>
           </div>
 
          </div> 

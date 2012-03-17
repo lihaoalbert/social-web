@@ -1,4 +1,7 @@
+#encoding: utf-8
 class ReportsController < ApplicationController
+  before_filter :check_sec
+
   def dashboard
     @date_to = Date.today + 1
     @name ='albert'
@@ -174,15 +177,39 @@ class ReportsController < ApplicationController
     end
   end
 
-#¹Ø¼ü´Ê·ÖÎö±¨±í
+#å…³é”®è¯åˆ†ææŠ¥è¡¨
   def keywords
- 
+    #Time.new.strftime("%Y-%m-%d")
+    # startdate = (Time.new-7*24*60*60).strftime("%Y-%m-%d")
+    #@products = WeiboRule.paginate(:page => params[:page], :per_page => 50, :joins => "LEFT JOIN `weibo_mains` ON weibo_mains.WeiboID = weibo_rules.WeiboID", :select => "weibo_mains.WeiboText,weibo_mains.WeiboTime,weibo_mains.RetweetedID", :conditions => ["weibo_rules.WeiboID in (select WeiboID from weibo_mains where AccountID = ? ) and weibo_rules.RuleID in (#{@strid.to_s}) #{@strsql}",@userid] )
+    #params[:RuleID]
+    @category = RuleDef.find(:all, :select => "rule_defs.RuleName, rulenumbers.RuleNum, rulenumbers.created_at", 
+      :joins => "LEFT JOIN `rulenumbers` ON rule_defs.id = rulenumbers.RuleID ", 
+      :conditions=>[" rule_defs.AccountID = ? and rule_defs.RuleType = 1", @userid])
+    xAxis = Array.new
+    yAxis1 = Array.new
+    yAxis2 = Array.new
+    @category.each do |m|
+      xAxis.push(m.RuleName)
+      yAxis1.push(m.RuleNum)
+      yAxis2.push(m.RuleNum)
+    end
+    @acc='ä¸­æ–‡'
+    @h = LazyHighCharts::HighChart.new('graph') do |f|
+      f.options[:chart][:defaultSeriesType] = "area"
+      f.series(:name=>'ä¸­å›½', :data=>yAxis1)
+      #f.series(:name=>'Jane', :data=> [1, 3, 4, 3, 3, 5, 4,-46,7,8,8,9,9,0,0,9] )
+      f.options[:chart][:inverted] = false
+    f.options[:title][:text] = xAxis[0]
+      f.options[:xAxis][:categories] = xAxis
+     end
+     
     respond_to do |format|
       format.html # index.html.erb
     end
   end
 
-#¿Í»§·ÖÎö±¨±í
+#å®¢æˆ·åˆ†ææŠ¥è¡¨
   def customer
  
     respond_to do |format|
@@ -190,7 +217,7 @@ class ReportsController < ApplicationController
     end
   end
 
-#Î¢²©´«²¥¹ì¼£
+#å¾®åšä¼ æ’­è½¨è¿¹
   def message_track
  
     respond_to do |format|
@@ -198,7 +225,7 @@ class ReportsController < ApplicationController
     end
   end
 
-#ÊÂ¼ş´®·ÖÎö
+#äº‹ä»¶ä¸²åˆ†æ
   def event_track
  
     respond_to do |format|
@@ -206,7 +233,7 @@ class ReportsController < ApplicationController
     end
   end
 
-#ÎÒµÄÎ¢²©Í³¼Æ
+#æˆ‘çš„å¾®åšç»Ÿè®¡
   def my_message
     
     user_id=1983927817
@@ -216,12 +243,20 @@ class ReportsController < ApplicationController
       format.html # index.html.erb
     end
   end
-#²âÊÔresque job
+#æµ‹è¯•resque job
   def parse  
     user_id=1983927817
     Resque.enqueue(WeiboJob,user_id)  
     render :text => "We are working on parsing our feed right now."  
   end  
   
-  
+  def check_sec
+    if user_signed_in?
+      @userid = current_user.id
+    else
+      #@userid = 1
+      redirect_to :controller => 'home'
+    end
+  end
+    
 end

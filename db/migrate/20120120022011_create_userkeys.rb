@@ -6,6 +6,8 @@ class CreateUserkeys < ActiveRecord::Migration
       t.column :key1, :string, :limit => 50, :null => false
       t.column :key2, :string, :limit => 50, :null => false
       t.column :user_id, :integer, :limit => 10, :null => false
+      t.column :UID, :integer, :limit => 19, :null => false
+      
       t.timestamps
     end
   end

@@ -1,0 +1,64 @@
+<%= form_tag :action => 'rule_list' do %>
+<div class="clearfix">
+	<label for="wbtxt" class="twoline">关键词：</label>
+    <%= text_field_tag 'wbtxt', @wbtxt, :class => "full"%>
+</div>
+<hr class="component-spacer">
+<div class="">
+	<div class="clearfix">
+		<label class="twoline" id="optionsRadio">规则：</label>
+		<div class="input">
+			<ul class="inputs-list">
+	            <%@ruledef.each do |ruledef|%>
+	            <li>
+	            	<label>
+	            		<%= check_box_tag 'rulechecked[]', ruledef.KeyWord , (@rulechecked.to_s.include?(ruledef.KeyWord.to_s)) %><%= ruledef.RuleName %>--<%= ruledef.KeyWord %>
+	            	</label>
+	            </li>
+	            <% end %>
+            </ul>
+        </div>
+    </div>
+    <hr class="component-spacer">
+
+    <div class="clearfix">
+    	<label class="twoline" id="optionsRadio">时间：</label>
+       <div class="input">
+         <ul class="inputs-list">
+         	<li>
+         		<label>
+         			<%= radio_button_tag 'datecustom', 'all', (cookies[:datecustom] == nil || cookies[:datecustom] == "all") ? true : false %>全部
+         		</label>
+    	    </li>
+    	    <li>
+    	    	<label>
+    	        	<%= radio_button_tag 'datecustom', 'week', cookies[:datecustom] == "week" ? true : false %>一周内
+    	        </label>
+    	    </li>
+    	    <li>
+    	    	<label>
+    	        	<%= radio_button_tag 'datecustom', 'month', cookies[:datecustom] == "month" ? true : false %>当前月
+    	        </label>
+    	    </li>
+    	    <li>
+    	    	<label>
+    	        	<%= radio_button_tag 'datecustom', 'user', cookies[:datecustom] == "user" ? true : false %>用户指定时间
+    	        </label>
+    	    </li>
+    	    <li>
+	    	    	<%= text_field_tag 'startdate', cookies[:startdate] == nil ? Time.now.strftime('%Y-%m-%d') : cookies[:startdate], :disabled => true %>
+	    	    	<p id="startdatetxt"></p>
+	    	    	-----
+	    	    	<p></p>
+	    	    	<%= text_field_tag 'enddate', cookies[:enddate] == nil ? (Time.now+24*60*60).strftime('%Y-%m-%d') : cookies[:enddate], :disabled => true %>
+	    	    	<p id="enddatetxt"></p>
+    	    </li>
+         </ul>
+       </div>
+    </div>
+</div>
+<hr class="component-spacer" >
+<div class="actions" style="padding-top: 0px;padding-left: 0px;">
+    <%= submit_tag "搜索", :class => "btn primary"%>
+</div>
+<% end %>

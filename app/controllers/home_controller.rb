@@ -51,7 +51,17 @@ class HomeController < ApplicationController
   end
   
   def save_user_key(intuserid,strusermail,strwbfirm,strkey1,strkey2)
-    Userkey.create(:user_id => intuserid, :mail_user => strusermail, :weibo_firm => strwbfirm, :key1 => strkey1, :key2 => strkey2)
+    oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
+    oauth.authorize_from_access(strkey1, strkey2)
+    usermes=Weibo::Base.new(oauth).verify_credentials
+    Userkey.create(
+      :user_id => intuserid, 
+      :mail_user => strusermail, 
+      :weibo_firm => strwbfirm, 
+      :key1 => strkey1, 
+      :key2 => strkey2,
+      :UID => usermes.id
+    )
   end
   
   def logout

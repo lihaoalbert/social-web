@@ -14,6 +14,7 @@
     <!-- Le styles -->
     <!--<link href="../bootstrap.css" rel="stylesheet">-->
     <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "/javascripts/dtree.js" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
     <style type="text/css">
@@ -79,6 +80,7 @@
           <ul class="nav">
             <li><a href="/reports/dashboard">首页</a></li>
             <li><a href="/messages/select_message">微博搜索</a></li>
+            <li><a href="/searching/rule_list">规则搜索</a></li>
             <li><a href="/messages/upload_message">发布管理</a></li>
             <li class="menu">
                <a href="#" class="menu">客户管理</a>
@@ -94,7 +96,8 @@
                <a href="#" class="menu">微博监听</a>
                <ul class="menu-dropdown">
                   <li><a href="/messages/output">数据导出</a></li>
-                  <li><a href="/messages/userrule_message">监听规则设置</a></li>
+                  <li><a href="/settings/keyword_rule_list">监听规则设置</a></li>
+                  <li><a href="/category/">规则分类</a></li>
                 </ul>
               </li>
               <li class="menu">
@@ -114,7 +117,7 @@
 			     <a href="#" class="menu">设置</a>
                <ul class="menu-dropdown">
                   <li><a href="/messages/output">数据导出</a></li>
-                  <li><a href="/messages/userrule_message">监听规则设置</a></li>
+                  <li><a href="/settings/keyword_rule_list">监听规则设置</a></li>
                 </ul>
                </li>
             <% if user_signed_in? %>    

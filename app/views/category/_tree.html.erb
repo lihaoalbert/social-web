@@ -1,0 +1,27 @@
+<%= javascript_include_tag "/javascripts/dtree.js" %>
+<div>
+   	<%
+      def each_child(menu)
+          if(menu.nil? or menu.childs.nil?)
+              return;
+          end %>
+           <%= "dtree.add(#{menu.id},#{menu.ParentID.nil? ? "0" : menu.ParentID},'#{menu.RuleName}(#{menu.MonitCnt})','/category/index/#{menu.id}');" %>
+           <%
+          menu.childs.each do |m|
+              each_child(m);
+          end
+      end
+   %>
+<script type="text/javascript">    
+  dtree = new dTree('dtree');
+  dtree.add(0,-1,'论坛首页');
+  <%
+   @category.each do |m|
+    each_child(m)
+   end
+  %>
+  document.write(dtree);
+  dtree.config.useSelection = "true";
+  dtree.openAll();  
+</script>
+</div>

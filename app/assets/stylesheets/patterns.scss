@@ -750,10 +750,20 @@ input[type=submit].btn {
 
 // PAGINATION
 // ----------
-
+//previous_page disabled
 .pagination {
   height: $baseline * 2;
-  margin: $baseline 0;
+  margin: 9px 0;
+  em {
+    float: left;
+    padding: 0 9px;
+    line-height: ($baseline * 2) - 2;
+    border-right: 1px solid;
+    border-right-color: #ddd;
+    border-right-color: rgba(0,0,0,.15);
+    *border-right-color: #ddd; /* IE6-7 */
+    text-decoration: none;    
+  }
   ul {
     float: left;
     margin: 0;
@@ -767,7 +777,7 @@ input[type=submit].btn {
   }
   a {
     float: left;
-    padding: 0 14px;
+    padding: 0 9px;
     line-height: ($baseline * 2) - 2;
     border-right: 1px solid;
     border-right-color: #ddd;
@@ -786,6 +796,21 @@ input[type=submit].btn {
   }
   .next a {
     border: 0;
+  }
+  .previous_page {
+  }
+  .disabled {
+    display: none;
+  }
+  .gap {
+    float: left;
+    padding: 0 9px;
+    line-height: ($baseline * 2) - 2;
+    border-right: 1px solid;
+    border-right-color: #ddd;
+    border-right-color: rgba(0,0,0,.15);
+    *border-right-color: #ddd; /* IE6-7 */
+    text-decoration: none;
   }
 }
 

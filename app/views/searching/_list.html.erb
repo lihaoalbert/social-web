@@ -1,0 +1,25 @@
+<table >
+	<% if @weibomains != "" %>
+	  <tr>
+	  	<th>序号</th>
+	  	<th>微博内容</th>
+	  	<th>微博创建时间</th>
+	  	<th>状态</th>
+	  </tr>
+	  <% @weibomains.each do |weibomains| %>
+	  	<tr>
+	  		<td width="10%"><%= @id %></td>
+	  		<td width="60%"><%= weibomains.WeiboText %></td>
+	  		<td width="20%"><%= weibomains.WeiboTime.strftime("%Y年%m月%d日  %H:%M:%S") %></td>
+	  		<td width="10%"><%= weibomains.RetweetedID == nil ? "原创" : "转发" %></td>
+	  	</tr>
+	  	<% @id += 1 %>
+      <% end %>
+      <tr>
+      	<td colspan="4" style="font-size: 3">
+      		<%= will_paginate @products %><div style="float: right">共<%=@products.total_entries%>笔</div>
+      	</td>
+      </tr>
+      
+    <% end %>
+</table> 

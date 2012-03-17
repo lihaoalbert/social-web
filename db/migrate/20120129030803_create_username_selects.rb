@@ -18,7 +18,11 @@ class CreateUsernameSelects < ActiveRecord::Migration
       t.column :statuses_count, :integer
       t.column :favourites_count, :integer
       t.column :user_id, :integer, :null => false
+      t.column :rule_id, :integer
+      t.column :rulename, :string, :limit => 100
       t.timestamps
     end
+    add_index :username_selects, :UID,                :unique => true
+    add_index :username_selects, :rule_id,            :unique => true
   end
 end

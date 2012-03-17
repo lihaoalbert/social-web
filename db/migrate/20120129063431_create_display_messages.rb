@@ -12,7 +12,11 @@ class CreateDisplayMessages < ActiveRecord::Migration
       t.column :user_location, :string, :limit => 100
       t.column :profile_image_url, :string, :limit => 100
       t.column :monitor, :boolean, :limit => 3
+      t.column :rule_id, :integer
+      t.column :rulekeyword, :string, :limit => 255 
       t.timestamps
     end
+    add_index :display_messages, :WID,                :unique => true
+    add_index :display_messages, :rule_id,            :unique => true
   end
 end
