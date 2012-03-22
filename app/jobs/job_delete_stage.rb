@@ -11,37 +11,39 @@ class JobDeleteStage
            `City`,`Profile_image_url`,`Gender`,
            `Followers_count`,
            `Friends_count`,
-           `Statuses_coun`,
+           `Statuses_count`,
            `Verified`,
            `RetweetedID`,
            `AccountID`,
            `WeiboFrom`,`created_at`)
           select distinct `WeiboID`,
-           `WeiboText`,
-           `WeiboTime`,
-           `WeiboSource`,
-           `WeiboUID`,
-           `ScreenName`,
-           left(`UserLocation`, locate(' ', `UserLocation`)) as `Province`,
-           substring(`UserLocation`,locate(' ', `UserLocation`)+1) as `City`,
-           `Profile_image_url`,
-           `Gender`,
-           `Followers_count`,
-           `Friends_count`,
-           `Statuses_coun`,
-           `Verified`,
-           `RetweetedID`,
-           `AccountID`,
-           `WeiboFrom`, now() from weibo_stages 
+           max(`WeiboText`),
+           max(`WeiboTime`),
+           max(`WeiboSource`),
+           max(`WeiboUID`),
+           max(`ScreenName`),
+           left(max(`UserLocation`), locate(' ', max(`UserLocation`))) as `Province`,
+           substring(max(`UserLocation`),locate(' ', max(`UserLocation`))+1) as `City`,
+           max(`Profile_image_url`),
+           max(`Gender`),
+           max(`Followers_count`),
+           max(`Friends_count`),
+           max(`Statuses_count`),
+           max(`Verified`),
+           max(`RetweetedID`),
+           max(`AccountID`),
+           max(`WeiboFrom`), now() from weibo_stages 
            where created_at < DATE_ADD(now(),INTERVAL -600 SECOND)
-              and WeiboID not in(select distinct WeiboID from weibo_mains)"
+              and WeiboID not in(select distinct WeiboID from weibo_mains)
+            group by `WeiboID`"
     dbh.query(sql)
     sql = "insert into weibo_rules (WeiboID, RuleID, WeiboTime, WeiboFrom, created_at)
            select distinct WeiboID, RuleID, WeiboTime, 
              case when WeiboFrom='sinaweibo' then 1 else 0 end as WeiboFrom , 
              DATE_ADD(now(),INTERVAL -600 SECOND) as created_at
             from weibo_stages 
-             where created_at < DATE_ADD(now(),INTERVAL -600 SECOND)"
+             where created_at < DATE_ADD(now(),INTERVAL -600 SECOND)
+             and weiboID + '-' + RuleID not in(select distinct weiboID + '-' + RuleID from weibo_rules)"
     dbh.query(sql)
     sql = "delete from weibo_stages 
            where WeiboID in (select WeiboID from weibo_rules)

@@ -1,0 +1,2 @@
+JobWeiboStageRange:
+  range: 10 #weibo stage 表 插入job endtime每次间隔10分

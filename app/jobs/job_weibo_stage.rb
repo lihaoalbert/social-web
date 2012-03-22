@@ -6,9 +6,14 @@ class JobWeiboStage
     @strkeyword = keyword
     @filter_ori = filterori
     @starttime = argsvalue.to_i
+    rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
+    rails_env = ENV['RAILS_ENV'] || 'JobWeiboStageRange'
+    job_config = YAML.load_file(rails_root + '/config/job.yml')
+    job_range = job_config[rails_env]["range"]
+    
     begin
-      for i in (1...1440)      
-        @endtime = argsvalue.to_i+60*i
+      for i in (1...1440/job_range.to_i)      
+        @endtime = argsvalue.to_i+60*job_range.to_i*i
         oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
         oauth.authorize_from_access(@userkey.key1, @userkey.key2)
         @messageselect=Weibo::Base.new(oauth).status_search(@strkeyword,{:starttime => @starttime, :endtime => @endtime, :filter_ori => @filter_ori })
@@ -28,8 +33,8 @@ class JobWeiboStage
               :Profile_image_url => f.user.profile_image_url, 
               :Gender => f.user.gender , 
               :Followers_count => f.user.followers_count, 
-              :Friends_count => f.user.riends_count, 
-              :Statuses_coun => f.user.statuses_coun, 
+              :Friends_count => f.user.friends_count, 
+              :Statuses_count => f.user.statuses_count, 
               :Verified => f.user.verified,  
               :RetweetedID => f.retweeted_status ? f.retweeted_status.id : nil,
               :RuleID => rule_id, 

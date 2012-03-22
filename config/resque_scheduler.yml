@@ -1,16 +1,25 @@
-    lunch:
-      cron: 0 12 * * *
-      class: WeiboJob
-      args: 1867570035
-      description: Lunch
-    dinner:
-      cron: 0 6 * * *
-      class: WeiboJob
-      args: 1867570035
-      description: Dinner
-    midnight_snack:
-      cron: 0 0 * * *
-      class: WeiboJob
-      args: 1867570035
-      description: Midnight Snack
-
+UserFollowerFriends:                         #根据现有用户每天收集一次三层用户关注和粉丝
+  cron: 0 0 * * *                            #每天一次
+  class: UserFollowerFriends
+  args: 
+  description: UserFollowerFriends
+UserMessage:                                  #根据用户列表获得用户的关注数和粉丝数
+  cron: 0 0 * * *                             #每天一次
+  class: UserMessage
+  args: 
+  description: UserMessage
+JobRuleDef:                                  #根据规则每20分钟获取一次
+  every: 20m                                 #每20分钟执行一次
+  class: JobRuleDef
+  args: 
+  description: JobRuleDef
+JobDeleteStage:                               #根据删除导入的数据
+  cron: 0 0 * * *                             #每天一次
+  class: JobDeleteStage
+  args: 
+  description: JobDeleteStage
+JobRuleNumber:
+  every: 20m                                 #每20分钟执行一次
+  class: JobRuleNumber
+  args: 
+  description: JobRuleNumber
