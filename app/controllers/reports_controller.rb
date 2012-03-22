@@ -179,10 +179,7 @@ class ReportsController < ApplicationController
 
 #关键词分析报表
   def keywords
-    #Time.new.strftime("%Y-%m-%d")
-    # startdate = (Time.new-7*24*60*60).strftime("%Y-%m-%d")
-    #@products = WeiboRule.paginate(:page => params[:page], :per_page => 50, :joins => "LEFT JOIN `weibo_mains` ON weibo_mains.WeiboID = weibo_rules.WeiboID", :select => "weibo_mains.WeiboText,weibo_mains.WeiboTime,weibo_mains.RetweetedID", :conditions => ["weibo_rules.WeiboID in (select WeiboID from weibo_mains where AccountID = ? ) and weibo_rules.RuleID in (#{@strid.to_s}) #{@strsql}",@userid] )
-    #params[:RuleID]
+    #近30天规则树趋势
     @category = RuleDef.find(:all, 
       :select => "rule_defs.RuleName, rulenumbers.created_at , sum(rulenumbers.RuleNum) AS RuleNum", 
       :joins => "LEFT JOIN `rulenumbers` ON rule_defs.id = rulenumbers.RuleID ", 
@@ -192,7 +189,7 @@ class ReportsController < ApplicationController
     @category.each do |m|
       rule.push([m.RuleName,m.created_at.strftime("%Y-%m-%d"),m.RuleNum.to_i])
     end
-    @abc=rule
+    #转为报表数据格式
     mydata = ReportData.new(rule)
     @h = LazyHighCharts::HighChart.new('graph') do |f|
       f.options[:chart][:defaultSeriesType] = "column"
@@ -202,12 +199,21 @@ class ReportsController < ApplicationController
       #f.options[:chart][:inverted] = false
       #f.options[:chart][:width] = 300
       #f.options[:chart][:height] = 180
-      f.options[:title][:text] = '报表'      
+      f.options[:title][:text] = '近30天提到次数趋势'      
       f.options[:xAxis][:categories] = mydata.get_report_xAxis
+      #legend 样式
+      f.options[:legend][:layout] = 'horizontal' #'vertical'
+      #f.options[:legend][:backgroundColor] = '#ffffff'
+      #f.options[:legend][:align] = 'left'
+      #f.options[:legend][:verticalAlign] = 'top'
+      #f.options[:legend][:floating] = false
+      #f.options[:legend][:x] = 35
+      #f.options[:legend][:y] = 5
     end
+
     
     @abc = mydata.get_report_data
-                                                   
+                                                
      
     respond_to do |format|
       format.html # index.html.erb
