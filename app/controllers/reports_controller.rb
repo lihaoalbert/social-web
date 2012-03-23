@@ -191,7 +191,7 @@ class ReportsController < ApplicationController
     end
     #转为报表数据格式
     mydata = ReportData.new(rule)
-    @h = LazyHighCharts::HighChart.new('graph') do |f|
+    @h1 = LazyHighCharts::HighChart.new('graph') do |f|
       f.options[:chart][:defaultSeriesType] = "column"
       mydata.get_report_data.each do |d|
         f.series(:name=>d[0], :data=> d[1] )
@@ -212,7 +212,30 @@ class ReportsController < ApplicationController
     end
 
     
-    @abc = mydata.get_report_data
+    #近30天规则Pie分布
+    @category = RuleDef.find(:all, 
+      :select => "rule_defs.RuleName, sum(rulenumbers.RuleNum) AS RuleNum", 
+      :joins => "LEFT JOIN `rulenumbers` ON rule_defs.id = rulenumbers.RuleID ", 
+      :conditions=>[" rule_defs.AccountID = ? and rule_defs.RuleType = 1", @userid],
+      :group => "rule_defs.RuleName")
+    cpie = Array.new
+    @category.each do |m|
+      cpie.push([m.RuleName,m.RuleNum.to_i])
+    end
+    
+   @h2 = LazyHighCharts::HighChart.new('graph') do |f|
+      f.options[:title][:text] = '近30天提到次数关键词分布'  
+      f.plotOptions({:pie=>{
+          :allowPointSelect=> true , 
+          :cursor=> 'pointer' , 
+          :dataLabels=>{
+            :enabled=> true , 
+            :color=> '#000000' , 
+            :connectorColor=> '#000000'}}})
+        f.series({:type=>'pie' , :name=> 'Browser share' , 
+          :data=> cpie})
+   end
+    @abc = @category
                                                 
      
     respond_to do |format|

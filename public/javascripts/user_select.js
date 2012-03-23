@@ -5,23 +5,26 @@ $(document).ready(function(){
 		$("#city").empty();
 		selcity(chaprovince,"")		
 	});
+
 	$("#txtselect").bind('keydown',function(e){
-		var strselect = $("#txtselect").val();
-		if(e.keyCode==13)
-		{
+		if(e.keyCode==13){
+			showLoading();
+			var strselect = $("#txtselect").val();
 			if(strselect != "")
 			{
 				userselect();
 			}
 			else
 			{
-				alert("关键字不能为空")
+				//alert("关键字不能为空")
+				hideLoading();
 			}
-			
 		}
-	});
+	}); 
+
 	$("#butselect").click(function()
 	{
+		showLoading();
 		var strselect = $("#txtselect").val();
 		if(strselect != "")
 		{
@@ -29,7 +32,8 @@ $(document).ready(function(){
 		}
 		else
 		{
-			alert("关键字不能为空")
+			//alert("关键字不能为空")
+			hideLoading();
 		}
 	});
 	
@@ -38,7 +42,7 @@ $(document).ready(function(){
 		var strselect = $("#txtselect").val();
 		var strsintro = 0;
 		var strsdomain = 0;
-		var strgender = "";
+		var strgender = "n";
 		var strprovince = $("#province").val();
 		var strcity = $("#city").val();
 		if($("#txtmes").attr('checked'))
@@ -47,7 +51,6 @@ $(document).ready(function(){
 		}
 		if($("#txtsdomain").attr('checked'))
 		{
-			alert("OK");
 			strsdomain = 1;
 		}
 		if($("#man").attr('checked'))
@@ -79,11 +82,13 @@ $(document).ready(function(){
 	    	success:function(data)
 	    	{
 	    		$("#userselect").html(data);
+	    		hideLoading();
                 //alert(data);
 	    	},
 	    	error:function(xhr,r,e)
 	    	{
-	    		alert(e);
+	    		hideLoading();
+	    		//alert(e);
 	    	}
 	    });
 	}
@@ -106,11 +111,10 @@ $(document).ready(function(){
 	    		//var data = data.replace(/&quot;,/g,"',")
 	    		var dataObj=JSON.parse(data)
                 //alert(dataObj.keyword);
-                
-              $("#province").append("<option label='不限' value='0'>不限</option>")
+                $("#province").prepend("<option value=''>省/直辖市</option>");
                 for(p=0; p<dataObj.length; p++)
 	            {
-	            	$("#province").append("<option label='" + dataObj[p].Name + "' value='" + dataObj[p].Code + "'>" + dataObj[p].Name + "</option>")
+	            	$("#province").append("<option label='" + dataObj[p].Code + "' value='" + dataObj[p].Code + "'>" + dataObj[p].Name + "</option>")
 	            };
                 strcode=$("#province").val(); 
                 if(selcity(strcode,""))
@@ -143,10 +147,10 @@ $(document).ready(function(){
 	    		//var data = data.replace(/&quot;,/g,"',")
 	    		var dataObj=JSON.parse(data)
                 //alert(dataObj.keyword);
-                $("#city").append("<option label='不限' value='0'>不限</option>")
+                
                 for(p=0; p<dataObj.length; p++)
 	            {
-	            	$("#city").append("<option label='" + dataObj[p].Name + "' value='" + dataObj[p].Code + "'>" + dataObj[p].Name + "</option>")
+	            	$("#city").append("<option label='" + dataObj[p].Code + "' value='" + dataObj[p].Code + "'>" + dataObj[p].Name + "</option>")
 	            };
 	            $("#city").val(citycode);
 	            //$("#city").val("");

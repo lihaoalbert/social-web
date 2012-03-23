@@ -9,9 +9,9 @@
 		<% @weibomains.each do |weibomains| %>
 	  	<tr>
 	  		<td width="10%"><%= @pageid %></td>
-	  		<td width="60%"><%= weibomains.WeiboText %></td>
-	  		<td width="20%"><%= weibomains.WeiboTime %></td>
-	  		<td width="10%"><%= weibomains.RetweetedID == nil ? "原创" : "转发" %></td>
+	  		<td width="55%"><%= weibomains.WeiboText %></td>
+	  		<td width="20%"><%= weibomains.WeiboTime.strftime("%Y年%m月%d日") %></td>
+	  		<td width="15%"><%= weibomains.RetweetedID == nil ? "原创" : "转发" %></td>
 	  	</tr>
 	  	<% @pageid += 1 %>
       <% end %>

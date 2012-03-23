@@ -1,18 +1,69 @@
-<h2>Sign up</h2>
+        <div class="row">
+          <div class="main-content" style="width:620px;">
+            <div class="page-header">
+ 			<h2>新用户注册<small>胜因营销管理</small></h2>
+        </div>
+        <div id="sel_mes" class="stream-content" style="padding: 10px;">
+		  <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+		    <%= devise_error_messages! %>
+		    <div style="padding: 10px">
+		    	<%= f.label :email, "邮箱：" %>
+		    	<%= f.email_field :email %>
+		    </div>
+		  
+		    <div style="padding: 10px">
+		    	<%= f.label :password, "*密码：" %>
+		    	<%= f.password_field :password %>
+		    </div>
+		  
+		    <div style="padding: 10px">
+		    	<%= f.label :password_confirmation, "*确认密码"%>
+		    	<%= f.password_field :password_confirmation %>
+		    </div>
+		    <div style="padding: 10px">
+		    	<%= f.submit "注册",:class => "btn primary" %>
+		    </div>
+		   	<div style="padding: 10px;">
+		   	  <%= render :partial => "devise/shared/links" %>
+		   	</div>
+		  <% end %>
+		  
+		</div>
+            </div> 
+         <div class="dashboard"> 
+         		<div class="components">
+         		  <div class="component">
+         		  	
+         		  </div>
+				<hr class="component-spacer">
+         		  <div class="component">
+					<ul id="ruleselect">
+				  </ul>
+         		  </div>
+				<hr class="component-spacer">
+				</div>
+          </div><!--   dashboard end   --> 
+         <!--   details pane   --> 
+          <div id="details-pane-outer">
+			    <div class="details-pane-shell">
+              <div class="details-pane" id="details-pane" style="display: none; height: 585px; width: 335px; left: 620px; margin-top: 15px; -webkit-transition-property: none; ">
+		    		<div class="inner-pane active">
+						  <div class="pane-toolbar pane-built-in">
+						          <a class="pane-close toolbar-control " rel="pane_close" href="javascript:void(0)">关闭 <span>×</span></a>
+						    <br style="clear: both">
+						  </div>
+						  <div id="pane-load" style="overflow-y:scroll; ">
+						  </div>
+			    	</div>
+			  </div>
+			</div></div>
+			<!--   details pane  end --> 
+  </div>
+</div>
+</div>
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
 
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email %></div>
 
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
 
-  <div><%= f.label :password_confirmation %><br />
-  <%= f.password_field :password_confirmation %></div>
-
-  <div><%= f.submit "Sign up" %></div>
-<% end %>
-
-<%= render :partial => "devise/shared/links" %>
+ 
+ 

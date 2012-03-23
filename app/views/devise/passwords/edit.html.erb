@@ -1,16 +1,30 @@
-<h2>Change your password</h2>
-
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.hidden_field :reset_password_token %>
-
-  <div><%= f.label :password, "New password" %><br />
-  <%= f.password_field :password %></div>
-
-  <div><%= f.label :password_confirmation, "Confirm new password" %><br />
-  <%= f.password_field :password_confirmation %></div>
-
-  <div><%= f.submit "Change my password" %></div>
-<% end %>
-
-<%= render :partial => "devise/shared/links" %>
+<div class="row" rel="page" style="padding: 10px;">
+	<div class="main-content" style="width:660px;height:50px">
+		<div class="page-header">
+			<h2>密码变更<small>胜因营销管理</small></h2>
+        </div>
+        <div id="sel_mes" class="stream-content" style="padding: 10px;">
+			<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
+			  <%= devise_error_messages! %>
+			  <%= f.hidden_field :reset_password_token %>
+			
+			  <div style="padding: 10px;">
+			  	<%= f.label :password, "*密码：" %>
+			  	<%= f.password_field :password %>
+			  </div>
+			
+			  <div style="padding: 10px;">
+			  	<%= f.label :password_confirmation, "*确认密码：" %>
+			  	<%= f.password_field :password_confirmation %>
+			  </div>
+			
+			  <div style="padding: 10px;">
+			  	<%= f.submit "确定" %>
+			  </div>
+			<% end %>
+			<div style="padding: 10px;">
+				<%= render :partial => "devise/shared/links" %>
+			</div>
+		</div>
+	</div>
+</div>

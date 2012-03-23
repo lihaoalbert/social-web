@@ -3,6 +3,7 @@ $(document).ready(function(){
   $("#clock4").clock({"format":"24","calendar":"false"});
   $("#uploadmess").keypress(function(e){
     if(e.keyCode==13){
+    	alert("ok");
       var clock = $("#txtclock").val();
   	  //var myDate = new Date(new Date().getTime()+1000*60*parseInt(clock));
 	  var txtmessage = $("#uploadmess").val();
@@ -38,12 +39,12 @@ $(document).ready(function(){
 			datatype: 'json',
 			success:function(data)
 			{
-				//alert(data);
+				alert(data);
 				location.reload();
 			},
 			error:function(xhr,r,e)
 			{
-				//alert(e)
+				alert(e)
 			}
 		});
 	  //alert("文字个数" + txtmessage.length);  

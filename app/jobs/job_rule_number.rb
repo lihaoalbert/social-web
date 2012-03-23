@@ -11,15 +11,24 @@ class JobRuleNumber
       # >= '" + Time.new.strftime("%Y-%m-%d") + "'" 
     dbh.query(sql)
     #重新插入近60天数据
-    sql = "insert into rulenumbers(RuleID, RuleNum, created_at) 
-    select a.RuleID,count(a.WeiboID), date(b.WeiboTime) from weibo_rules a 
-    left join weibo_mains b on a.WeiboID=b.WeiboID 
-    where date(b.WeiboTime) >= date(DATE_ADD(now(),INTERVAL -60 DAY))
-    group by a.RuleID, date(b.WeiboTime)"
-    
-    # select now(), date(now()),  DATE_ADD(now(),INTERVAL 14 DAY) 
+    sql = "select t.id as RuleID,0, c.WeiboTime from rule_defs t
+    left join (select distinct date(WeiboTime) as WeiboTime from weibo_mains where date(WeiboTime) >= date(DATE_ADD(now(),INTERVAL -60 DAY))
+      ) c on 1=1
+    where t.RuleType=1
+    group by t.id, c.WeiboTime
+    order by c.WeiboTime,t.id"
+    dbh.query(sql)
+    #重新计算
+    sql = "update rulenumbers t,(select a.RuleID,count(a.WeiboID) as cnt, date(b.WeiboTime) as WeiboTime from weibo_rules a 
+      left join weibo_mains b on a.WeiboID=b.WeiboID 
+      where date(b.WeiboTime) >= date(DATE_ADD(now(),INTERVAL -60 DAY))
+      group by a.RuleID, date(b.WeiboTime)
+    ) t1
+    set t.RuleNum=t1.cnt
+    where t.RuleID=t1.RuleID and date(t.created_at) = t1.WeiboTime"
     dbh.query(sql)
     dbh.close
+    
     #date_range 日期列表
     date_range = Rulenumber.find(:all, 
       :select => "created_at",

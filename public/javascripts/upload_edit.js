@@ -45,7 +45,7 @@ $(document).ready(function(){
 	    		"send_state":txtsendstate,
 	    		"clock":clock,
 	    		"strtype":"updatemessage",
-	    		"strmonitor":txtmonitor 
+	    		"strmonitor":txtmonitor
 	    	},
 	    	success:function(data)
 	    	{

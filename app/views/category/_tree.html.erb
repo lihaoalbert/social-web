@@ -1,5 +1,19 @@
 <%= javascript_include_tag "/javascripts/dtree.js" %>
 <div>
+	<%= form_tag :action => 'index' do %>
+    <div class="clearfix">
+    	<%= text_field_tag 'txtkeyword', @txtkeyword, :placeholder => '关键字...' %>
+    	<%= submit_tag "搜索", :class => "btn primary"%>
+	</div>
+    <div class="clearfix">
+		<label class="twoline" id="optionsRadio">时间：</label>
+		<div class="input">
+		   	<label style="width: 60px;"><%= radio_button_tag 'datecustom', 'all', (cookies[:datecustom] == nil || cookies[:datecustom] == "all") ? true : false %>全部</label>
+		   	<label style="width: 60px;"><%= radio_button_tag 'datecustom', 'week', cookies[:datecustom] == "week" ? true : false %>一周内</label>
+		    <label style="width: 60px;"><%= radio_button_tag 'datecustom', 'month', cookies[:datecustom] == "month" ? true : false %>30天</label>
+		</div>
+    </div>
+    <% end %>
    	<%
       def each_child(menu)
           if(menu.nil? or menu.childs.nil?)
@@ -14,7 +28,7 @@
    %>
 <script type="text/javascript">    
   dtree = new dTree('dtree');
-  dtree.add(0,-1,'论坛首页');
+  dtree.add(0,-1,'监控规则树');
   <%
    @category.each do |m|
     each_child(m)

@@ -9,8 +9,8 @@ class JobWeiboStage
     rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
     rails_env = ENV['RAILS_ENV'] || 'JobWeiboStageRange'
     job_config = YAML.load_file(rails_root + '/config/job.yml')
-    job_range = job_config[rails_env]["range"]
-    
+    #job_range = job_config[rails_env]["range"]
+    job_range = 10
     begin
       for i in (1...1440/job_range.to_i)      
         @endtime = argsvalue.to_i+60*job_range.to_i*i

@@ -2,7 +2,7 @@
 class MessagesController < ApplicationController
   before_filter :account_info
   
-  #我的微博
+  #微博首页
   def timeline
     if account_info then
       @key1 = account_info[0]
@@ -24,6 +24,7 @@ class MessagesController < ApplicationController
     end
   end
   
+  #我的微博
   def user_timeline
     if account_info then
       @key1 = account_info[0]
@@ -31,6 +32,28 @@ class MessagesController < ApplicationController
       oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
       oauth.authorize_from_access(@key1,@key2)
       @mlist = Weibo::Base.new(oauth).user_timeline
+    end
+  end
+  
+  #我发出的评论
+  def comments_by_me
+    if account_info then
+      @key1 = account_info[0]
+      @key2 = account_info[1]
+      oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
+      oauth.authorize_from_access(@key1,@key2)
+      @mlist = Weibo::Base.new(oauth).comments_by_me
+    end
+  end
+  
+  #我收到的评论
+  def comments_to_me
+    if account_info then
+      @key1 = account_info[0]
+      @key2 = account_info[1]
+      oauth = Weibo::OAuth.new(Weibo::Config.api_key, Weibo::Config.api_secret)
+      oauth.authorize_from_access(@key1,@key2)
+      @mlist = Weibo::Base.new(oauth).comments_to_me
     end
   end
   
